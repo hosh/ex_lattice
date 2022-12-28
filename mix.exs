@@ -1,9 +1,9 @@
-defmodule ExSemiLattice.Mixfile do
+defmodule Lattice.Mixfile do
   use Mix.Project
 
   def project do
     [
-      app: :ex_semi_lattice,
+      app: :lattice,
       aliases: aliases(),
       deps: deps(),
       preferred_cli_env: [quality: :test],
@@ -13,7 +13,7 @@ defmodule ExSemiLattice.Mixfile do
       elixir: "~> 1.9",
 
       # Docs
-      #name: "ExSemiLattice",
+      #name: "Lattice",
       #docs: docs(),
 
       # Hex
@@ -33,7 +33,7 @@ defmodule ExSemiLattice.Mixfile do
 
   defp deps do
     [
-      {:ex_doc,      "~> 0.23", only: :dev,                 runtime: false},
+      {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:witchcraft, "~> 1.0"},
     ]
   end
@@ -48,7 +48,7 @@ defmodule ExSemiLattice.Mixfile do
   defp package do
     [
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => "https://github.com/hosh/ex_semi_lattice"},
+      links: %{"GitHub" => "https://github.com/hosh/ex_lattice"},
       maintainers: ["Ho-Sheng Hsiao"]
     ]
   end

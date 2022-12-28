@@ -1,0 +1,2 @@
+defmodule Lattice do
+end
