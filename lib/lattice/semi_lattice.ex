@@ -7,7 +7,7 @@ defclass Lattice.Semilattice do
   A semi-lattice is a semigroup that is also commutative and idempotent. An example
   is the maximum:
 
-  lmax(1) <> lmax(2) <> lmax(5) <> lmax(3) == 5
+  lmax(1) <> lmax(2) <> lmax(5) <> lmax(3) == lmax(5)
 
   Semi-lattices are the basis for CDRTs and distributed data structures that are
   eventually-consistent.
@@ -50,4 +50,15 @@ defclass Lattice.Semilattice do
       equal?(left, right)
     end
   end
+
+  @doc """
+  Alias for `append/2`, meant to emphasize idempotency
+
+  Examples:
+     merge(lmax(4), lmax(5))
+     lmax(5)
+
+  TODO: Use examples from iex
+  """
+  defalias merge(a, b), as: :append
 end
