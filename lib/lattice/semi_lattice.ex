@@ -29,9 +29,6 @@ defclass Lattice.Semilattice do
     # Semantically, "merge" describes semi-lattices better, and we don't have to
     # override append
     def append(a, b)
-
-    # This is the least value or bottom of the set
-    def least()
   end
 
   properties do
@@ -67,23 +64,7 @@ defclass Lattice.Semilattice do
   defalias merge(a, b), as: :append
 end
 
-# Design Notes:
-# Not sure if I should be wrapping Boolean. This can be done
-# with bare Boolean, but does it make sense where <> (append)
-# is logical or?
-#
-# Also, this is similar to empty/1 in Monoid. I am not sure of
-# the purpose of a sample
-#
-# In the Bloom^L paper, the least element is defined as bottom
-# value, so it is unwrapped.
-definst Lattice.Semilattice, for: Lattice.ADT.Boolean do
-  def least(), do: Lattice.ADT.Boolean.new(false)
-  def append(a, b), do: a.value || b.value
-end
-
 definst Lattice.Semilattice, for: Boolean do
-  def least(), do: false
   def append(a, b), do: a || b
 end
 
