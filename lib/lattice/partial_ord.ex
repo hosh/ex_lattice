@@ -22,7 +22,34 @@ defclass Lattice.PartialOrd do
     def lte?(a, b)
   end
 
+
   properties do
+    # Transitivity
+    #   if x <= y && y <= z = True, then x <= z = True
+    def transitivity(data) do
+      a = generate(data)
+      b = generate(data)
+      c = generate(data)
+
+      left = PartialOrd.lte?(a, b) && PartialOrd.lte?(b, c)
+      right = PartialOrd.lte?(a, c)
+
+      equal?(left, right)
+    end
+
+
+    # Reflexivity
+    #   x <= x = True
+    def reflexivity(data) do
+      a = generate(data)
+
+      equal?(PartialOrd.lte?(a, a), true)
+    end
+
+    # Antisymmetry
+    #   if x <= y && y <= x = True, then x == y = True
+    # Design Notes: Not sure we need to define this because
+    # eq?() is defined as lte?(a, b) && lte?(b, a)
   end
 
   @doc """
@@ -39,22 +66,30 @@ defclass Lattice.PartialOrd do
   def gt?(a, b), do: lte?(b, a) && ne?(a, b)
 end
 
-# Design Notes:
-# Not sure if I should be wrapping Boolean. This can be done
-# with bare Boolean, but does it make sense where <> (append)
-# is logical or?
-#
-# Also, this is similar to empty/1 in Monoid. I am not sure of
-# the purpose of a sample
-#
-# In the Bloom^L paper, the least element is defined as bottom
-# value, so it is unwrapped.
-definst Lattice.Semilattice, for: Lattice.ADT.Boolean do
-  def least(), do: Lattice.ADT.Boolean.new(false)
-  def append(a, b), do: a.value || b.value
+
+definst Lattice.PartialOrd, for: Integer do
+  def lte?(a, %Lattice.DataTypes.Infinity{}), do: true
+  def lte?(a, b), do: a <= b
 end
 
-definst Lattice.Semilattice, for: Boolean do
-  def least(), do: false
-  def append(a, b), do: a || b
+definst Lattice.PartialOrd, for: Float do
+  def lte?(a, %Lattice.DataTypes.Infinity{}), do: true
+  def lte?(a, b), do: a <= b
 end
+
+definst Lattice.PartialOrd, for: Lattice.DataTypes.Infinity do
+  alias Lattice.DataTypes.Infinity
+
+  def lte?(%Infinity{}, %Infinity{}), do: true
+  def lte?(_, %Infinity{}), do: true
+  def lte?(%Infinity{}, _), do: false
+end
+
+definst Lattice.PartialOrd, for: Lattice.Datatypes.NegativeInfinity do
+  alias Lattice.DataTypes.NegativeInfinity
+
+  def lte?(NegativeInfinity{}, %NegativeInfinity{}), do: true
+  def lte?(_, %NegativeInfinity{}), do: false
+  def lte?(%NegativeInfinity{}, _), do: true
+end
+
